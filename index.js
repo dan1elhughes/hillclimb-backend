@@ -28,8 +28,15 @@ io.on("connection", socket => {
 
 	socket.emit("generation", { data: population });
 
-	setInterval(() => {
+	const tick = setInterval(() => {
+		console.log("Tick");
 		population = nextGeneration(population);
+		console.log(population);
 		socket.emit("generation", { data: population });
 	}, 500);
+
+	socket.on("disconnect", () => {
+		console.log("Disconnected");
+		clearInterval(tick);
+	});
 });
